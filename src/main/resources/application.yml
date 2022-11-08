@@ -1,6 +1,7 @@
 server:
   port: 0
-
+jwt:
+  secret: VlwEyVBsYt9V7zq57TejMnVUyzblYcfPQye08f7MGVA9XkHa
 spring:
   application:
     name: user-service
@@ -9,11 +10,11 @@ spring:
 #    port: 5672
 #    username: guest
 #    password: guest
-#  datasource:
-#    driver-class-name: com.mysql.cj.jdbc.Driver
-#    url:
-#    username:
-#    password:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/user
+    username: root
+    password: root
 
 #  datasource:
 #    driver-class-name: org.h2.Driver

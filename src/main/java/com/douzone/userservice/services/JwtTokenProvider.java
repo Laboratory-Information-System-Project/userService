@@ -40,26 +40,25 @@ public class JwtTokenProvider {
                 .collect(Collectors.joining(","));
 
         long now = (new Date()).getTime();
-        String Athe = ((ArrayList)authentication.getAuthorities()).get(0).toString();
         // Access Token 생성
-        Date accessTokenExpiresIn = new Date(now + 7200000);
+        Date accessTokenExpiresIn = new Date(now + 3600000);
         String accessToken = Jwts.builder()
-                .setSubject(authentication.getName() + Athe)
+                .setSubject(authentication.getName())
                 .claim("auth", authorities)
                 .setExpiration(accessTokenExpiresIn)
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
 
         // Refresh Token 생성
-        String refreshToken = Jwts.builder()
-                .setExpiration(new Date(now + 7200000))
-                .signWith(key, SignatureAlgorithm.HS256)
-                .compact();
+//        String refreshToken = Jwts.builder()
+//                .setExpiration(new Date(now + 7200000))
+//                .signWith(key, SignatureAlgorithm.HS256)
+//                .compact();
 
         return TokenInfo.builder()
                 .grantType("Bearer")
                 .accessToken(accessToken)
-                .refreshToken(refreshToken)
+//                .refreshToken(refreshToken)
                 .build();
     }
 

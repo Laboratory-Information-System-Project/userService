@@ -11,14 +11,17 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/user-service")
+@CrossOrigin(origins = "*")
 public class UserController {
     private final UserService userService;
 
     @PostMapping("/login")
     public TokenInfo login(@RequestBody UserDto userLoginRequestDto){
         String username = userLoginRequestDto.getId();
-        String Password = userLoginRequestDto.getPw();
-        TokenInfo tokenInfo = userService.login(username,Password);
+        String password = userLoginRequestDto.getPw();
+        TokenInfo tokenInfo = userService.login(username,password);
         return  tokenInfo;
+
+
     }
 }

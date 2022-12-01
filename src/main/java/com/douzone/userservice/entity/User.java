@@ -5,6 +5,7 @@ import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -30,7 +31,7 @@ public class User implements UserDetails {
     private String username;
 
     @Column(name = "password",nullable = false)
-    private String Password;
+    private String password;
 
     @Column(name = "user_name",nullable = false)
     private String name;
@@ -42,7 +43,7 @@ public class User implements UserDetails {
     private String userAddress;
 
     @Column(name = "authority",nullable = false)
-    private String Authority;
+    private String authority;
 
     @Column(name = "user_email",nullable = false)
     private String userEmail;
@@ -53,7 +54,7 @@ public class User implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         ArrayList<GrantedAuthority> Author = new ArrayList<GrantedAuthority>();
-        Author.add(new SimpleGrantedAuthority(Authority));
+        Author.add(new SimpleGrantedAuthority(authority));
         return Author;
     }
 

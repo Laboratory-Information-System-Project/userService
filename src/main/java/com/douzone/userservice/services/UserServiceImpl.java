@@ -1,6 +1,7 @@
 package com.douzone.userservice.services;
 
 import com.douzone.userservice.domain.TokenInfo;
+import com.douzone.userservice.domain.UserDto;
 import com.douzone.userservice.entity.User;
 import com.douzone.userservice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
+import java.util.*;
 
 
 @Slf4j
@@ -44,6 +45,18 @@ public class UserServiceImpl implements UserService {
         return tokenInfo;
 
     }
+
+//    List<Map<String, Object>> listMap = new ArrayList<Map<String, Object>>();
+//    Map<String, Object> map = new HashMap<String,Object>();
+//
+//    List<Map<String, Object>> users = mapper.findUsersByUsername(userName);
+//        if(users.isEmpty()) {
+//        map.put("message", "존재하지 않은 사람입니다.");
+//        listMap.add(map);
+//        return listMap;
+//    }
+//        System.out.println(users);
+//        return users;
 
 //    @Override
 //    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

@@ -1,6 +1,7 @@
 package com.douzone.userservice.services;
 
 import com.douzone.userservice.domain.TokenInfo;
+import com.douzone.userservice.repository.UserRepository;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -13,12 +14,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-
 import java.security.Key;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Date;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -26,8 +23,10 @@ import java.util.stream.Collectors;
 public class JwtTokenProvider {
 
     private final Key key;
+    private final UserRepository userRepository;
 
-    public JwtTokenProvider(@Value("${jwt.secret}") String secretKey) {
+    public JwtTokenProvider(@Value("${jwt.secret}") String secretKey, UserRepository userRepository) {
+        this.userRepository = userRepository;
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
@@ -48,16 +47,19 @@ public class JwtTokenProvider {
                 .setExpiration(accessTokenExpiresIn)
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
-
         // Refresh Token 생성
 //        String refreshToken = Jwts.builder()
 //                .setExpiration(new Date(now + 7200000))
 //                .signWith(key, SignatureAlgorithm.HS256)
 //                .compact();
 
+        List<Object> authData = Collections.singletonList(authentication.getAuthorities());
         return TokenInfo.builder()
                 .grantType("Bearer")
                 .accessToken(accessToken)
+                .auth(authData.get(0).toString())
+                .name(userRepository.findByUsername(authentication.getName()).map(com.douzone.userservice.entity.User::getName).get())
+                .userId(userRepository.findByUsername(authentication.getName()).map(com.douzone.userservice.entity.User::getUserId).get())
 //                .refreshToken(refreshToken)
                 .build();
     }

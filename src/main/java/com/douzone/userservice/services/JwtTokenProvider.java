@@ -1,5 +1,7 @@
 package com.douzone.userservice.services;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
 import com.douzone.userservice.domain.TokenInfo;
 import com.douzone.userservice.repository.UserRepository;
 import io.jsonwebtoken.*;
@@ -23,12 +25,15 @@ import java.util.stream.Collectors;
 public class JwtTokenProvider {
 
     private final Key key;
+
+    private final String jwtKey;
     private final UserRepository userRepository;
 
     public JwtTokenProvider(@Value("${jwt.secret}") String secretKey, UserRepository userRepository) {
         this.userRepository = userRepository;
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
+        this.jwtKey = secretKey;
     }
 
     // 유저 정보를 가지고 AccessToken, RefreshToken 을 생성하는 메서드
@@ -41,12 +46,21 @@ public class JwtTokenProvider {
         long now = (new Date()).getTime();
         // Access Token 생성
         Date accessTokenExpiresIn = new Date(now + 3600000);
-        String accessToken = Jwts.builder()
-                .setSubject(authentication.getName())
-                .claim("auth", authorities)
-                .setExpiration(accessTokenExpiresIn)
-                .signWith(key, SignatureAlgorithm.HS256)
-                .compact();
+        // String accessToken = Jwts.builder()
+        //         .setSubject(authentication.getName())
+        //         .claim("auth", authorities)
+        //         .setExpiration(accessTokenExpiresIn)
+        //         .signWith(key, SignatureAlgorithm.HS256)
+        //         .compact();
+
+        Algorithm algorithm = Algorithm.HMAC256(jwtKey.getBytes());
+
+        String accessToken = JWT.create()
+                .withSubject(authentication.getName())
+                .withExpiresAt(new Date(now + 3600000))
+                .withIssuer("issuer")
+                .withClaim("auth", authorities)
+                .sign(algorithm);
         // Refresh Token 생성
 //        String refreshToken = Jwts.builder()
 //                .setExpiration(new Date(now + 7200000))

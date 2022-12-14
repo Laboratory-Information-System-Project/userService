@@ -73,7 +73,8 @@ public class JwtTokenProvider {
                 .accessToken(accessToken)
                 .auth(authData.get(0).toString())
                 .name(userRepository.findByUsername(authentication.getName()).map(com.douzone.userservice.entity.User::getName).get())
-                .userId(userRepository.findByUsername(authentication.getName()).map(com.douzone.userservice.entity.User::getUserId).get())
+                .userId(authentication.getName())
+//                .userId(userRepository.findByUsername(authentication.getName()).map(com.douzone.userservice.entity.User::getUserId).get())
 //                .refreshToken(refreshToken)
                 .build();
     }

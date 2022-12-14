@@ -23,7 +23,7 @@ import java.util.Map;
 public class User implements UserDetails {
     @Id
     @Column(name = "user_id",updatable = false,unique = true)
-    private String userId;
+    private Long userId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "department_code")

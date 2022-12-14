@@ -14,7 +14,7 @@ public class TokenInfo {
 //    private String refreshToken;
     private String auth;
     private String name;
-    private String userId;
+    private Long userId;
 
     public User toEntity(){
         return User.builder().authority(auth).name(name).build();

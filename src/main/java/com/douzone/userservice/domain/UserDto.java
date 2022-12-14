@@ -13,9 +13,4 @@ public class UserDto {
     @NotNull
     private String pw;
 
-
-    public User toEntity(){
-        return User.builder().userId(id).password(pw).build();
-    }
-
 }
